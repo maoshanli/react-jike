@@ -1,9 +1,20 @@
 import './index.scss'
-import { Button, Card, Form, Input } from "antd"
+import { Button, Card, Form, Input, message } from "antd"
 import logo from '@/assets/logo.png'
+import { useDispatch } from 'react-redux'
+import { fetchLogin } from '../../store/modules/user'
+import { useNavigate } from 'react-router'
 const Login=()=>{
-  const onFinish=values=>{
+  const dispatch=useDispatch()
+  const navigator=useNavigate()
+  const onFinish=async(values)=>{
     console.log('success:',values)
+    //触发异步action fetchLogin
+    await dispatch(fetchLogin(values))
+    //1.跳转到首页
+    navigator('/')
+    //2.提示一下用户
+    message.success('登录成功')
   }
   const onFinishFailed=errorInfo=>{
     console.log('Failed',errorInfo)
@@ -19,7 +30,7 @@ const Login=()=>{
           >
             {/* 后端接口一致name  */}
             {/* 多条校验逻辑，先校验第一条，再校验第二条 */}
-            <Form.Item name='phone' rules={[
+            <Form.Item name='mobile' rules={[
               {
                 required:true,
                 message:'请输入手机号'
