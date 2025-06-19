@@ -57,3 +57,7 @@ export default App;
 //Redux是基于浏览器内存的存储方式，刷新时状态恢复为初始值
 //获取并存Token Redux+LocalStorage
 //初始化Token  LocalStorage?LocalStorage:''
+//登录-封装Token的存取删方法
+//封装的原因
+//对于Token的各类操作在项目中多个模块中都有用到，为了共享复用可以封装成工具函数
+//
