@@ -50,3 +50,10 @@ export default App;
 //Token作为一个用户的标识数据，需要在很多模块中共享，Redux可以方便的解决状态共享问题。
 //1.Redux中编写获取Token的异步获取和同步修改
 //2.Login组件负责提交action并且吧表单数据传递过来
+//登录-Token持久化
+//现存问题
+//Redux存入Token之后如果刷新浏览器，Token会丢失（持久化就是防止刷新时丢失Token）(清理缓存呢？)
+//问题原因
+//Redux是基于浏览器内存的存储方式，刷新时状态恢复为初始值
+//获取并存Token Redux+LocalStorage
+//初始化Token  LocalStorage?LocalStorage:''
