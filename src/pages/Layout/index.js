@@ -32,6 +32,16 @@ const items = [
 ]
 
 const GeekLayout = () => {
+  const navigator=useNavigate()
+  const onMenuClick=(item)=>{
+    // console.log(item.key)
+    navigator(item.key)
+  }
+  //反向高亮
+  //1.获取当前路由路径
+  const location=useLocation()
+  const selectedKeys=location.pathname
+ 
   return (
     <Layout>
       <Header className="header">
@@ -50,8 +60,10 @@ const GeekLayout = () => {
           <Menu
             mode="inline"
             theme="dark"
+            selectedKeys={selectedKeys}
             items={items}
-            style={{ height: '100%', borderRight: 0 }}></Menu>
+            style={{ height: '100%', borderRight: 0 }}
+            onClick={onMenuClick}></Menu>
         </Sider>
         <Layout className="layout-content" style={{ padding: 20 }}>
           {/* 二级路由的出口 */}
