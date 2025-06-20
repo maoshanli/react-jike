@@ -1,6 +1,7 @@
 //和用户相关的状态管理
 import {createSlice} from '@reduxjs/toolkit'
 import { request,setToken as _setToken ,getToken} from '@/utils'
+import { removeToken } from '../../utils'
 const userStore=createSlice({
     name:'user',
     //数据装填
@@ -17,12 +18,17 @@ const userStore=createSlice({
         },
         setUserInfo(state,action){
             state.userInfo=action.payload
+        },
+        clearUserInfo(state){
+            state.token=''
+            state.userInfo={}
+            removeToken()
         }
     }
 })
 
 const userReducer=userStore.reducer
-const {setToken,setUserInfo}=userStore.actions
+const {setToken,setUserInfo,clearUserInfo}=userStore.actions
 
 //异步方法 完成登录获取token
 const fetchLogin=(loginform)=>{
@@ -43,6 +49,6 @@ const fetchUserInfo=()=>{
     }
 }
 //命名导出  import {setToken}名称相同
-export {setToken,fetchLogin,fetchUserInfo}
+export {setToken,fetchLogin,fetchUserInfo,clearUserInfo}
 //默认导出  import reducer,不用{},名称可以不同
 export default userReducer

@@ -37,6 +37,10 @@ const GeekLayout = () => {
     // console.log(item.key)
     navigator(item.key)
   }
+  const onConfirm=()=>{
+    dispatch(clearUserInfo())
+    navigator('/login')
+  }
   const dispatch=useDispatch()
   useEffect(()=>{
     dispatch(fetchUserInfo())
@@ -54,7 +58,7 @@ const GeekLayout = () => {
         <div className="user-info">
           <span className="user-name">{userInfo.name}</span>
           <span className="user-logout">
-            <Popconfirm title="是否确认退出？" okText="退出" cancelText="取消">
+            <Popconfirm title="是否确认退出？" okText="退出" cancelText="取消" onConfirm={onConfirm}>
               <LogoutOutlined /> 退出
             </Popconfirm>
           </span>
