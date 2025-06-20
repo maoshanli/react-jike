@@ -37,17 +37,22 @@ const GeekLayout = () => {
     // console.log(item.key)
     navigator(item.key)
   }
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    dispatch(fetchUserInfo())
+  },[dispatch])
+  const userInfo=useSelector(state=>state.user.userInfo)
   //反向高亮
   //1.获取当前路由路径
   const location=useLocation()
   const selectedKeys=location.pathname
- 
+  
   return (
     <Layout>
       <Header className="header">
         <div className="logo" />
         <div className="user-info">
-          <span className="user-name">{"***"}</span>
+          <span className="user-name">{userInfo.name}</span>
           <span className="user-logout">
             <Popconfirm title="是否确认退出？" okText="退出" cancelText="取消">
               <LogoutOutlined /> 退出
