@@ -96,4 +96,6 @@ export default App;
 //在axios拦截中监控401状态码
 //清除失效Token,跳转登录
 //Home-Echarts基础图表实现
-//
+//Home-Echarts组件封装实现
+//为什么要做组件封装？组件封装主要解决了复用的问题。
+//不一样的部分抽象成props
