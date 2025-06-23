@@ -2,7 +2,8 @@
 //2.超时时间
 //3.请求拦截器/响应拦截器
 import axios from "axios";
-import { getToken } from "./token";
+import { getToken, removeToken } from "./token";
+import router from "../router";
 
 const request=axios.create({
     baseURL:'http://geek.itheima.net/v1_0',
@@ -25,9 +26,17 @@ request.interceptors.request.use((config)=>{
 })
 //添加响应拦截器
 //在响应返回到客户端之前做拦截重点处理返回的数据
+//监控401
 request.interceptors.response.use((response)=>{
     return response.data
 },(error)=>{
+    if(error.response.status===401)
+    {
+        removeToken()
+        //并不会跳转
+        router.navigate('/login')
+        window.location.reload()
+    }
     return Promise.reject(error)
 })
 export {request}
