@@ -1,25 +1,134 @@
-import logo from './logo.svg';
-import './App.css';
 
+import {Button} from 'antd'
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+   <div className='App'>
+    <Button type="primary">Button</Button>
     </div>
   );
 }
 
 export default App;
+//按照业务规范整理项目目录（重点src目录）
+//  文件夹                      作用
+//  apis                       接口
+//  assets                    静态资源
+//  Components                 通用组件
+//  pages                      页面级组件
+//  router                     路由Router
+//  store                      Redux状态
+//  utils                      工具函数
+
+//安装scss
+//scss是一种后缀名为.css的预编译css语言，支持一些原生css不支持的高级用法，比如变量使用，嵌套语法等，使用scss可以让样式代码更加高效灵活
+
+//安装Ant Design组件库
+//AntDesign是由蚂蚁金服出品的社区使用最广的React PC端组件库，内置了常用的现成组件，可以帮助我们快速开发PC管理后台项目
+
+//配置基础路由Router
+//配置步骤
+
+//配置@别名路径
+//通过@替代src路径，便于开发中的路径查找访问
+//针对路径转换，修改webpack别名路径配置craco
+//针对联想提示，修改VSCode配置jsconfig.json
+
+//登录-准备基础静态结构
+//使用AntD现成的组件创建登录页的内容结构
+//主要组件:Card、Form、Input、Button
+//表单校验
+//表单校验可以在提交登录之前校验用户的输入是否符合预期，如果不符合就阻止提交，显示错误信息
+//FormItem绑定name,rules
+//a.失焦时校验（非提交）
+//b.手机号格式校验
+//登录-获取表单数据
+//当用户输入了正确的表单内容，点击确认按钮时需要收集到用户当前输入的内容
+//登录-封装request请求模块
+//在整个项目中会发送很多网络请求，使用axios三方库做好统一封装，方便统一管理
+//几乎所有的接口都是一样的接口域名/超时时间/Token权限处理
+//登录-使用Redux管理token
+//Token作为一个用户的标识数据，需要在很多模块中共享，Redux可以方便的解决状态共享问题。
+//1.Redux中编写获取Token的异步获取和同步修改
+//2.Login组件负责提交action并且吧表单数据传递过来
+//登录-Token持久化
+//现存问题
+//Redux存入Token之后如果刷新浏览器，Token会丢失（持久化就是防止刷新时丢失Token）(清理缓存呢？)
+//问题原因
+//Redux是基于浏览器内存的存储方式，刷新时状态恢复为初始值
+//获取并存Token Redux+LocalStorage
+//初始化Token  LocalStorage?LocalStorage:''
+//登录-封装Token的存取删方法
+//封装的原因
+//对于Token的各类操作在项目中多个模块中都有用到，为了共享复用可以封装成工具函数
+//Axios请求拦截器注入Token
+//Token作为用户的一个标识数据，后端很多借口都会以它作为接口权限判断的依据；请求拦截器注入Token之后，所有用到Axios实例的接口请求都自动携带Token
+//Axios请求拦截器请求头中注入Token
+//调用接口测试Token是否成功携带
+//使用Token做路由权限控制
+//有些路由页面内的信息比较敏感，如果用户没有经过登录获取到有效Token,是没有权限挑战的，根据Token的有误控制当前路由是否可以挑战就是路由的权限控制
+//1.封装高阶组件 以组件作为参数，返回的仍然是组件 路由组件-》是否有Token->路由组件（有）
+//2.测试有无Token
+//Layout-结构创建和样式初始化
+//样式初始化 包括一些边距
+//安装Normalize.css
+//实现步骤
+//入口文件处理
+//Layout-菜单点击跳转路由实现
+//Layout-根据当前路由路径高亮菜单
+//实现效果:页面在刷新时可以根据当前的路由路径让对应的左侧菜单高亮显示
+//思路分析
+//1.获取当亲url上的路由路径
+//2.找到菜单组件负责高亮的属性，绑定当前的路由路径
+//Layout-展示个人信息
+//关键问题:用户信息应该放到哪里维护？
+//和Token令牌类似，用户的信息通常很有可能在多个组件中需要共享维护，Redux
+//Layout退出登录实现
+//1.提示用户是否确认要退出（危险操作，二次确认）
+//2.用户确认之后清除用户信息（Token以及其他个人信息）
+//3.跳转到登录页（为下次登录做准备）
+//处理Token失效
+//什么是Token失效
+//为了用户的安全和隐私考虑，在用户长时间未在网站中做任何操作且规定的失效时间到达之后，当前token失效，
+//一旦失效，不能再作为用户令牌标识请求隐私数据
+//前端如何知道Token失效了
+//通常在Token失效之后再去请求接口，后端会返回401状态码，前端可以监控这个状态做后续操作
+//Token失效了前端做什么
+//在axios拦截中监控401状态码
+//清除失效Token,跳转登录
+//Home-Echarts基础图表实现
+//Home-Echarts组件封装实现
+//为什么要做组件封装？组件封装主要解决了复用的问题。
+//不一样的部分抽象成props
+//拓展-API模块封装
+//现存问题
+//当前的接口请求放到了功能实现的位置，没有在固定的模块内维护，后期查找维护困难
+//解决思路
+//吧项目中的所有接口按照业务模块以函数的形式统一封装到apis模块中
+//apis->user.js(用户相关请求函数)
+//apis->article.js(文章相关请求函数)
+//文章发布
+//1.实现基础文章发布
+//a.面包屑导航组件Breadcrumb
+//b.表单组件Form
+//c.输入框组件Input
+//d.下拉框组件Select-Option
+//e.按钮组件Button
+//2.实现封面上传
+//3.实现带封面的文章
+//准备富文本编辑器
+//react-quill
+
+//基础文章发布-频道数据获取
+//1.根据接口文档在APIS模块中封装接口函数
+//2.使用useState维护数据
+//3.在useEffect中调用接口获取数据并存入state
+//4.绑定数据到下拉框组件
+
+//基础文章发布--收集表单数据提交表单
+//a.使用Form组件收集表单数据
+//b.按照接口文档封装接口函数
+//c.按照接口文档处理表单数据
+//d.提交接口并验证是否成功
+
+//上传文章封面基础功能实现
+//<Upload>组件
