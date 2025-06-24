@@ -8,6 +8,7 @@ import {
    Upload,
    Space,
    Select,
+   message,
    
 } from "antd"
 import {PlusOutlined} from '@ant-design/icons'
@@ -38,28 +39,48 @@ const Publish=()=>{
 
   //提交表单
   const onFinish=(formValue)=>{
-   console.log(formValue)
+    //校验封面类型type是否和实际的图片列表imageList数量是相等的
+    if(imageList.length!==value)
+      return message.warning('封面类型和图片数量不匹配')
+    console.log(formValue)
    //1.按照接口文档的格式处理手机到的表单数据
    const{title,content,channel_id}=formValue
    const reqData={
       title:title,
       content:content,
       cover:{
-         type:0,
-         images:[]
+         type:value,
+         images:imageList.map(item=>item.response.data.url)
       },
       channel_id:channel_id
    }
    //2.调用接口提交
-    createArticleAPI()
+    createArticleAPI(reqData)
   }
 
   const [imageList,setImageList]=useState([])
   //上传回调
-  const onUploadChange=(value)=>{
-    console.log(value)
-    setImageList(value.fileList)
+  const onUploadChange=(info)=>{
+  let newFileList = [...info.fileList];
+
+    // // 1. Limit the number of uploaded files
+    // // Only to show two recent uploaded files, and old ones will be replaced by the new
+    
+    // newFileList = newFileList.slice(-value);
+
+    // // 2. Read from response and show file link
+    // newFileList = newFileList.map((file) => {
+    //   if (file.response) {
+    //     // Component will show file.url as link
+    //     file.url = file.response.url;
+    //   }
+    //   return file;
+    // });
+    setImageList(newFileList);
   }
+
+
+
    return (
     <div className="publish">
       {/* 实现圆角区域 */}
@@ -75,6 +96,7 @@ const Publish=()=>{
         <Form
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 16 }}
+          // 控制表单域的初始值，控制name为type的FormItem的初始值
           initialValues={{ type: 0 }}
           onFinish={onFinish}
         >
@@ -97,7 +119,8 @@ const Publish=()=>{
           </Form.Item>
           <Form.Item label="封面">
             <Form.Item name="type">
-              <Radio.Group value={value} onChange={onChange}> 
+              {/* <Radio.Group value={value} onChange={onChange}>  */}
+                <Radio.Group  onChange={onChange}> 
                 <Radio value={1}>单图</Radio>
                 <Radio value={3}>三图</Radio>
                 <Radio value={0}>无图</Radio>
@@ -107,14 +130,14 @@ const Publish=()=>{
               listType: 决定选择文件框的外观样式
               showUploadList: 控制显示上传列表
             */} 
-           {(value!==0)&&<Upload
+           {(value>0)&&<Upload
               name='image'
               listType="picture-card"
               action={'http://geek.itheima.net/v1_0/upload'}
               onChange={onUploadChange}
               showUploadList
-              
-             
+              fileList={imageList}
+              maxCount={value}
             >
               <div style={{ marginTop: 8 }}>
                 <PlusOutlined />
