@@ -53,6 +53,13 @@ const Publish=()=>{
    //2.调用接口提交
     createArticleAPI()
   }
+
+  const [imageList,setImageList]=useState([])
+  //上传回调
+  const onUploadChange=(value)=>{
+    console.log(value)
+    setImageList(value.fileList)
+  }
    return (
     <div className="publish">
       {/* 实现圆角区域 */}
@@ -101,10 +108,12 @@ const Publish=()=>{
               showUploadList: 控制显示上传列表
             */} 
            {(value!==0)&&<Upload
-              listType="picture-card"
-              showUploadList
-              action={'http://geek.itheima.net/v1_0/upload'}
               name='image'
+              listType="picture-card"
+              action={'http://geek.itheima.net/v1_0/upload'}
+              onChange={onUploadChange}
+              showUploadList
+              
              
             >
               <div style={{ marginTop: 8 }}>
