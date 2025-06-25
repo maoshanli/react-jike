@@ -9,6 +9,11 @@ import { useChannel } from '../../hooks/useChannel'
 import { getArticleAPI } from '../../apis/article'
 const { RangePicker } = DatePicker
 const Article=()=>{
+  //定义状态枚举
+  const status={
+    1:<Tag color='warning'>待审核</Tag>,
+    2:<Tag color='success'>审核通过</Tag>
+  }
    //1.获取文章列表
    const[articleList,setArticleList]=useState([])
    const[totalCount,setTotalCount]=useState(0)
@@ -41,9 +46,7 @@ const Article=()=>{
     {
       title: '状态',
       dataIndex: 'status',
-      // data - 后端返回的状态status 根据它做条件渲染
-      // data === 1 => 待审核
-      // data === 2 => 审核通过
+      render:data=>status[data]
      
     },
     {
