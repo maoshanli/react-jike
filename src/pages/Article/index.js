@@ -40,6 +40,15 @@ const Article=()=>{
     // getAticleList()
 
   }
+  
+  //分页
+  const onPageChange=(page)=>{
+    // console.log('分页参数',page)
+      setReqData({
+      ...reqData,
+      page:page
+    })
+  }
 
   //定义状态枚举
   const status={
@@ -166,9 +175,9 @@ const Article=()=>{
       {/* 表格区域 */}
       <Card title={`根据筛选条件共查询到${totalCount}条结果：`}>
         <Table rowKey="id" columns={columns} dataSource={articleList} pagination={{
-          total: 2,
-          pageSize: 10,
-          
+          total: totalCount,
+          pageSize: reqData.per_page,
+          onChange:onPageChange
         }} />
       </Card>
     </div>
