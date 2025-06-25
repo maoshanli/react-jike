@@ -4,16 +4,33 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Table, Tag, Space } from 'antd'
 // 引入汉化包 时间选择器显示中文
 import locale from 'antd/es/date-picker/locale/zh_CN'
+import { useEffect, useState } from 'react'
+import { useChannel } from '../../hooks/useChannel'
+import { getArticleAPI } from '../../apis/article'
 const { RangePicker } = DatePicker
 const Article=()=>{
+   //1.获取文章列表
+   const[articleList,setArticleList]=useState([])
+   const[totalCount,setTotalCount]=useState(0)
+  useEffect(()=>{
+    async function getAticleList(){
+    const res=await getArticleAPI()
+    console.log(res)
+    setArticleList(res.data.results)
+    setTotalCount(res.data.total_count)
+    }
+    getAticleList()
+  },[])
+   const {channelList}=useChannel()
    const navigate=useNavigate()
    const columns = [
     {
       title: '封面',
       dataIndex: 'cover',
       width: 120,
+
       render: cover => {
-        return <img width={80} height={60} alt="" />
+        return <img width={80} height={60} alt="" src={cover.images[0]}/>
       }
     },
     {
@@ -95,7 +112,7 @@ const Article=()=>{
               placeholder="请选择文章频道"
               style={{ width: 120 }}
             >
-              {/* {channelList.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)} */}
+              {channelList.map(item => <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>)}
             </Select>
           </Form.Item>
 
@@ -112,8 +129,8 @@ const Article=()=>{
         </Form>
       </Card>
       {/* 表格区域 */}
-      <Card title={`根据筛选条件共查询到 2 条结果：`}>
-        <Table rowKey="id" columns={columns} dataSource={[]} pagination={{
+      <Card title={`根据筛选条件共查询到${totalCount}条结果：`}>
+        <Table rowKey="id" columns={columns} dataSource={articleList} pagination={{
           total: 2,
           pageSize: 10,
           

@@ -18,6 +18,7 @@ import 'react-quill/dist/quill.snow.css';
 import './index.scss'
 import { useEffect, useState } from "react";
 import { createArticleAPI, getChannelAPI } from "../../apis/article";
+import { useChannel } from "../../hooks/useChannel";
 const Publish=()=>{
     //单选框
     const [value, setValue] = useState(0);
@@ -26,17 +27,7 @@ const Publish=()=>{
     setValue(e.target.value);
   };
 
-   const [channelList,setChannelList]=useState([])
-   useEffect(()=>{
-      const getChanneList=async()=>{
-         const res=await getChannelAPI()
-         console.log(res)
-         setChannelList(res.data.channels)
-      }
-      getChanneList()
-   },
-  [])
-
+   const{channelList}=useChannel()
   //提交表单
   const onFinish=(formValue)=>{
     //校验封面类型type是否和实际的图片列表imageList数量是相等的

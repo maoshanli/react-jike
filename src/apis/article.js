@@ -18,3 +18,13 @@ export function createArticleAPI(formData){
         data:formData
     })
 }
+
+//3.获取文章列表
+export function getArticleAPI(params)
+{
+  return request({
+        url:'/mp/articles',
+        method:'GET',
+        params
+    })
+}
