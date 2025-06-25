@@ -9,6 +9,38 @@ import { useChannel } from '../../hooks/useChannel'
 import { getArticleAPI } from '../../apis/article'
 const { RangePicker } = DatePicker
 const Article=()=>{
+  //筛选
+  //准备state而不是放在提交中，因为有页面相关参数需要填充回去
+  const [reqData,setReqData]=useState({
+     status:'',
+      channel_id:'',
+      begin_pubdate:'',
+      end_pubdate:'',
+      page:1,
+      per_page:4,
+  })
+  const OnSelectArticle=(data)=>{
+   
+    setReqData({
+      ...reqData,
+       status:data.status,
+      channel_id:data.channel_id,
+      begin_pubdate:data.date[0].format('YYYY-MM-DD'),
+      end_pubdate:data.date[1].format('YYYY-MM-DD'),
+    
+    })
+
+    //在effect函数中补充依赖项,reqData变化时更新
+    // async function getAticleList(){
+    // const res=await getArticleAPI(reqData)
+    // console.log(res)
+    // setArticleList(res.data.results)
+    // setTotalCount(res.data.total_count)
+    // }
+    // getAticleList()
+
+  }
+
   //定义状态枚举
   const status={
     1:<Tag color='warning'>待审核</Tag>,
@@ -19,13 +51,13 @@ const Article=()=>{
    const[totalCount,setTotalCount]=useState(0)
   useEffect(()=>{
     async function getAticleList(){
-    const res=await getArticleAPI()
+    const res=await getArticleAPI(reqData)
     console.log(res)
     setArticleList(res.data.results)
     setTotalCount(res.data.total_count)
     }
     getAticleList()
-  },[])
+  },[reqData])
    const {channelList}=useChannel()
    const navigate=useNavigate()
    const columns = [
@@ -101,7 +133,7 @@ const Article=()=>{
         }
         style={{ marginBottom: 20 }}
       >
-        <Form initialValues={{ status: '' }}>
+        <Form initialValues={{ status: '' }} onFinish={OnSelectArticle}>
           <Form.Item label="状态" name="status">
             <Radio.Group>
               <Radio value={''}>全部</Radio>
