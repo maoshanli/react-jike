@@ -12,13 +12,14 @@ import {
    
 } from "antd"
 import {PlusOutlined} from '@ant-design/icons'
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; 
 import './index.scss'
 import { useEffect, useState } from "react";
-import { createArticleAPI, getChannelAPI } from "../../apis/article";
+import { createArticleAPI, getArticleDetailAPI, getChannelAPI } from "../../apis/article";
 import { useChannel } from "../../hooks/useChannel";
+import { useForm } from "antd/es/form/Form";
 const Publish=()=>{
     //单选框
     const [value, setValue] = useState(0);
@@ -54,6 +55,7 @@ const Publish=()=>{
   const onUploadChange=(info)=>{
   let newFileList = [...info.fileList];
 
+
     // // 1. Limit the number of uploaded files
     // // Only to show two recent uploaded files, and old ones will be replaced by the new
     
@@ -69,8 +71,25 @@ const Publish=()=>{
     // });
     setImageList(newFileList);
   }
+  //回填数据
+  const [serachParams]=useSearchParams()
+  const articleId=serachParams.get('id')
+  //获取实例
+  const[form]=Form.useForm()
+  useEffect(()=>{
+      //1.通过id获取数据
+      async function getArticleDetail(id) {
+        const res= await getArticleDetailAPI(id)
+        console.log(res.data)
+        //2.调用实例方法，完成回填
+        form.setFieldsValue(res.data)
+      }
+      getArticleDetail(articleId)
+     
+      
+  },[articleId,form])
 
-
+  
 
    return (
     <div className="publish">
@@ -90,6 +109,7 @@ const Publish=()=>{
           // 控制表单域的初始值，控制name为type的FormItem的初始值
           initialValues={{ type: 0 }}
           onFinish={onFinish}
+          form={form}
         >
           <Form.Item
             label="标题"

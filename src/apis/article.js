@@ -33,8 +33,17 @@ export function getArticleAPI(params)
 export function delArticleAPI(id)
 {
     return request({
-        url:`http://geek.itheima.net/v1_0/mp/articles/${id}`,
+        url:`/mp/articles/${id}`,
         method:'DELETE'
        
+    })
+}
+
+//5.获取文章详情
+export function getArticleDetailAPI(id)
+{
+    return request({
+        url:`/mp/articles/${id}`,
+        method:'GET'
     })
 }
