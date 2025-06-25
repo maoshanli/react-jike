@@ -28,3 +28,13 @@ export function getArticleAPI(params)
         params
     })
 }
+
+//4.删除文章
+export function delArticleAPI(id)
+{
+    return request({
+        url:`http://geek.itheima.net/v1_0/mp/articles/${id}`,
+        method:'DELETE'
+       
+    })
+}

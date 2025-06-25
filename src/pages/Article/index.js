@@ -6,7 +6,7 @@ import { Table, Tag, Space } from 'antd'
 import locale from 'antd/es/date-picker/locale/zh_CN'
 import { useEffect, useState } from 'react'
 import { useChannel } from '../../hooks/useChannel'
-import { getArticleAPI } from '../../apis/article'
+import { delArticleAPI, getArticleAPI } from '../../apis/article'
 const { RangePicker } = DatePicker
 const Article=()=>{
   //筛选
@@ -48,6 +48,15 @@ const Article=()=>{
       ...reqData,
       page:page
     })
+  }
+ 
+  //删除
+  const onDelete=async(id)=>{
+     console.log(id)
+     const res=await delArticleAPI(id)
+     setReqData({
+      ...reqData,
+     })
   }
 
   //定义状态枚举
@@ -115,7 +124,7 @@ const Article=()=>{
             <Popconfirm
               title="删除文章"
               description="确认要删除当前文章吗?"
-             
+              onConfirm={()=>onDelete(data.id)}
               okText="Yes"
               cancelText="No"
             >
